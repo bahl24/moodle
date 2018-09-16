@@ -21,6 +21,7 @@
 
             $mform->addElement('filepicker', 'filename', get_string('file'), null, array('accepted_types' => '*'));
             $images = block_simplehtml_images();
+            
             $radioarray = array();
             for ($i = 0; $i < count($images); $i++) {
                 $radioarray[] =& $mform->createElement('radio', 'picture', '', $images[$i], $i);
