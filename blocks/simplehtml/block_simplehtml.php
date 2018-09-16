@@ -26,11 +26,12 @@ class block_simplehtml extends block_base {
             if($DB->get_records('block_simplehtml', array('blockid' => $this->instance->id))){
                 $simplehtmlpages = $DB->get_records('block_simplehtml', array('blockid' => $this->instance->id));
                 $this->content->text .= '<ul class="block-simplehtml-pagelist">';
+                $this->content->text .= html_writer::start_tag('ul');
                 foreach($simplehtmlpages as $simplehtmlpage){
-                $pageurl = new moodle_url('/blocks/simplehtml/view.php', array('blockid' => $this->instance->id, 'courseid' => $COURSE->id, 'id' => $simplehtmlpage->id, 'viewpage' => '1'));
-        $this->content->text .= html_writer::start_tag('li');
-        $this->content->text .= html_writer::link($pageurl, $simplehtmlpage->pagetitle);
-        $this->content->text .= html_writer::end_tag('li');
+                    $pageurl = new moodle_url('/blocks/simplehtml/view.php', array('blockid' => $this->instance->id, 'courseid' => $COURSE->id, 'id' => $simplehtmlpage->id, 'viewpage' => '1'));
+                    $this->content->text .= html_writer::start_tag('li');
+                    $this->content->text .= html_writer::link($pageurl, $simplehtmlpage->pagetitle);
+                    $this->content->text .= html_writer::end_tag('li');
                 }
                 $this->content->text .= html_writer::end_tag('ul');
             }   
