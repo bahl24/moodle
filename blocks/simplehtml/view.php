@@ -50,6 +50,14 @@ else if($simplehtml->get_data()){
     redirect($courseurl);    
 }
 else{
+if ($id != 0) {
+    if (!$toform = get_record('block_simplehtml', 'id', $id)) {
+        error(get_string('nopage', 'block_simplehtml', $id));
+    }
+} else {
+  $toform = new stdClass;
+} 
+
  
 echo $OUTPUT->header();  
 if($id){
