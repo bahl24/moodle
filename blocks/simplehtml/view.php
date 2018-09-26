@@ -26,6 +26,7 @@ $simplehtml = new simplehtml_form();
 
 $toform['blockid'] = $blockid;
 $toform['courseid'] = $courseid;
+$toform['id'] = $id;
 $simplehtml->set_data($toform);
 
 
@@ -37,22 +38,32 @@ else if($simplehtml->get_data()){
     $fromform = $simplehtml->get_data();
     $courseurl = new moodle_url('/course/view.php', array('id'=>$id));
     //print_object($fromform);
+    if($fromform->id != 0){
+    if(!$DB->insert_record('block_simplehtml', $fromform)){
+            print_error('updateerror', 'block_simplehtml');
+    }
     
-    
-    if (!$DB->insert_record('block_simplehtml', $fromform))     {
+    if (!$DB->insert_record('block_simplehtml', $fromform)){
             print_error('inserterror', 'block_simplehtml');
         }
+    }
     redirect($courseurl);    
 }
 else{
  
-echo $OUTPUT->header();    
-if ($viewpage) {
-    $simplehtmlpage = $DB->get_record('block_simplehtml', array('id' => $id));
-    block_simplehtml_print_page($simplehtmlpage);
-} else {
-    $simplehtml->display();
+echo $OUTPUT->header();  
+if($id){
+  $simplehtmlpage = $DB->get_record('block_simplehtml', array('id' => $id)); 
+  if ($viewpage) {
+      $simplehtmlpage = $DB->get_record('block_simplehtml', array('id' => $id));
+      block_simplehtml_print_page($simplehtmlpage);
+  } else {
+      $simplehtml->display();
+  }
 }
+ else{
+  $simplehtml->display();
+ }
 $settingsnode = $PAGE->settingsnav->add(get_string('simplehtmlsettings', 'block_simplehtml'));
 $editurl = new moodle_url('/blocks/simplehtml/view.php', array('id' => $id, 'courseid' => $courseid, 'blockid' => $blockid));
 $editnode = $settingsnode->add(get_string('editpage', 'block_simplehtml'), $editurl);
