@@ -34,6 +34,7 @@
             
             $mform->addElement('hidden','blockid');
             $mform->addElement('hidden','courseid');
+            $mform->addElement('hidden','id','0');
 
             $this->add_action_buttons();
 
