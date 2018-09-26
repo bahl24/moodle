@@ -14,7 +14,8 @@ class block_simplehtml extends block_base {
         $this->content         =  new stdClass;
         $this->content->text   = 'The of our SimpleHTML block!';
 
-        global $COURSE,$DB;
+        global $COURSE,$DB,$PAGE;
+        $canmanage = $PAGE->user_is_editing($this->instance->id);
 
         $url = new moodle_url('/blocks/simplehtml/view.php', array('blockid' => $this->instance->id, 'courseid' => $COURSE->id));
         $this->content->footer = html_writer::link($url, get_string('addpage', 'block_simplehtml'));
@@ -28,10 +29,16 @@ class block_simplehtml extends block_base {
                 $this->content->text .= '<ul class="block-simplehtml-pagelist">';
                 $this->content->text .= html_writer::start_tag('ul');
                 foreach($simplehtmlpages as $simplehtmlpage){
-                    $pageurl = new moodle_url('/blocks/simplehtml/view.php', array('blockid' => $this->instance->id, 'courseid' => $COURSE->id, 'id' => $simplehtmlpage->id, 'viewpage' => '1'));
-                    $this->content->text .= html_writer::start_tag('li');
-                    $this->content->text .= html_writer::link($pageurl, $simplehtmlpage->pagetitle);
-                    $this->content->text .= html_writer::end_tag('li');
+                    if($canmanage){
+                        $edit = '<a href="'.$CFG->wwwroot.'/blocks/simplehtml/view.php?id='
+                               .$simplehtmlpage->id.'&blockid='.$this->instance->id.'&courseid='.
+                               $COURSE->id.'"><img src="'.$CFG->pixpath.'/t/edit.gif" alt="'.
+                               get_string('editpage', 'block_simplehtml').'" /></a>';
+                    }
+                    else{
+                        $edit='';
+                    }
+                    $this->content->text .= '<li><a href="'.$CFG->wwwroot.'/blocks/simplehtml/view.php?id='.$simplehtmlpage->id.'&courseid='.$COURSE->id.'">'.$simplehtmlpage->pagetitle.'</a>'.$edit.'</li>';
                 }
                 $this->content->text .= html_writer::end_tag('ul');
             }   
